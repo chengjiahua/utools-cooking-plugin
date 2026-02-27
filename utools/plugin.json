@@ -1,0 +1,16 @@
+{
+  "pluginName": "HowToCook",
+  "description": "做饭指南",
+  "author": "Anduin2017",
+  "version": "1.0.0",
+  "logo": "logo.png",
+  "features": [
+    {
+      "code": "howtocook",
+      "explain": "做饭指南",
+      "cmds": ["做饭","烹饪","教程" ,"菜谱", "HowToCook"]
+    }
+  ],
+  "main": "index.html",
+  "platform": ["win32", "darwin", "linux"]
+}

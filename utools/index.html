@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HowToCook - 程序员做饭指南</title>
+  <!-- 引入 Markdown 解析库 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- 引入 Markdown 样式 -->
+  <link rel="stylesheet" href="markdown.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 蚂蚁设计系统 - 白天模式 */
+    :root {
+      --primary-color: #1890ff;
+      --primary-hover: #40a9ff;
+      --primary-active: #096dd9;
+      --text-color: #262626;
+      --text-secondary: #8c8c8c;
+      --border-color: #e8e8e8;
+      --bg-color: #f5f5f5;
+      --bg-white: #ffffff;
+      --bg-light: #fafafa;
+      --bg-gray: #f0f0f0;
+      --success-color: #52c41a;
+      --warning-color: #faad14;
+      --error-color: #f5222d;
+      --header-bg: #1890ff;
+      --header-text: #ffffff;
+      --sidebar-bg: #ffffff;
+      --sidebar-text: #262626;
+      --sidebar-hover: #f5f5f5;
+      --sidebar-active: #e6f7ff;
+      --sidebar-active-text: #1890ff;
+      --content-bg: #fafafa;
+      --card-bg: #ffffff;
+      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+      --btn-primary: #1890ff;
+      --btn-primary-hover: #40a9ff;
+      --btn-primary-active: #096dd9;
+      --input-bg: #ffffff;
+      --input-border: #d9d9d9;
+      --input-focus: #1890ff;
+      --divider: #e8e8e8;
+    }
+
+    /* 蚂蚁设计系统 - 黑夜模式 */
+    body.dark {
+      --primary-color: #1890ff;
+      --primary-hover: #40a9ff;
+      --primary-active: #096dd9;
+      --text-color: #e6e6e6;
+      --text-secondary: #999999;
+      --border-color: #434343;
+      --bg-color: #1f1f1f;
+      --bg-white: #262626;
+      --bg-light: #2c2c2c;
+      --bg-gray: #333333;
+      --success-color: #52c41a;
+      --warning-color: #faad14;
+      --error-color: #f5222d;
+      --header-bg: #1f1f1f;
+      --header-text: #e6e6e6;
+      --sidebar-bg: #262626;
+      --sidebar-text: #e6e6e6;
+      --sidebar-hover: #333333;
+      --sidebar-active: #1f1f1f;
+      --sidebar-active-text: #1890ff;
+      --content-bg: #2c2c2c;
+      --card-bg: #262626;
+      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --btn-primary: #1890ff;
+      --btn-primary-hover: #40a9ff;
+      --btn-primary-active: #096dd9;
+      --input-bg: #333333;
+      --input-border: #434343;
+      --input-focus: #1890ff;
+      --divider: #434343;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 顶部导航栏 */
+    .header {
+      background-color: var(--header-bg);
+      color: var(--header-text);
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header .logo {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header .logo img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+
+    /* 主导航 */
+    .header .nav {
+      display: flex;
+      align-items: center;
+      margin-left: 48px;
+    }
+
+    .header .nav-item {
+      padding: 0 16px;
+      height: 64px;
+      line-height: 64px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--header-text);
+      font-size: 14px;
+    }
+
+    .header .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .header .nav-item.active {
+      background-color: rgba(255, 255, 255, 0.2);
+      font-weight: 600;
+    }
+
+    /* 右侧操作区 */
+    .header .actions {
+      display: flex;
+      align-items: center;
+    }
+
+    .header .search {
+      display: flex;
+      align-items: center;
+      margin-right: 16px;
+    }
+
+    .header .search input {
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      width: 200px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--header-text);
+    }
+
+    .header .search input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .header .search button {
+      padding: 6px 16px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: var(--header-text);
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .header .search button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* 主题切换按钮 */
+    .header .theme-toggle {
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--header-text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .header .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* 主内容区 */
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* 侧边栏 */
+    .sidebar {
+      width: 280px;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      overflow-y: auto;
+      padding: 24px 0;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .sidebar .sidebar-group {
+      margin-bottom: 32px;
+    }
+
+    .sidebar .sidebar-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-transform: uppercase;
+      padding: 0 24px 12px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--primary-color);
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--sidebar-text);
+      font-size: 14px;
+      position: relative;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar ul li:hover {
+      background-color: var(--sidebar-hover);
+      border-left-color: var(--primary-color);
+      padding-left: 27px;
+    }
+
+    .sidebar ul li.active {
+      background-color: var(--sidebar-active);
+      color: var(--sidebar-active-text);
+      font-weight: 600;
+      border-left-color: var(--primary-color);
+      padding-left: 27px;
+    }
+
+    /* 子菜单标题样式 */
+    .sidebar ul li.submenu-title {
+      font-weight: 700;
+      color: var(--text-color);
+      cursor: default;
+      margin-top: 16px;
+      position: relative;
+      padding-left: 24px;
+      border-left: none;
+    }
+
+    .sidebar ul li.submenu-title:hover {
+      background-color: transparent;
+      padding-left: 24px;
+    }
+
+    /* 可伸缩子菜单标题样式 */
+    .sidebar ul li.submenu-title.expandable {
+      cursor: pointer;
+    }
+
+    .sidebar ul li.submenu-title.expandable:hover {
+      background-color: var(--sidebar-hover);
+      padding-left: 27px;
+      border-left-color: var(--primary-color);
+    }
+
+    /* 箭头图标 */
+    .sidebar ul li.submenu-title.expandable::before {
+      content: '▶';
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      font-size: 10px;
+      transition: transform 0.3s ease;
+      color: var(--primary-color);
+    }
+
+    /* 展开状态的箭头图标 */
+    .sidebar ul li.submenu-title.expandable.collapsed::before {
+      transform: rotate(-90deg);
+    }
+
+    /* 子菜单项样式 */
+    .sidebar ul li.submenu-item {
+      padding-left: 40px;
+      font-size: 13px;
+      border-left: none;
+    }
+
+    .sidebar ul li.submenu-item:hover {
+      background-color: var(--sidebar-hover);
+      border-left-color: var(--primary-color);
+      padding-left: 43px;
+    }
+
+    .sidebar ul li.submenu-item.active {
+      background-color: var(--sidebar-active);
+      color: var(--sidebar-active-text);
+      font-weight: 600;
+      border-left-color: var(--primary-color);
+      padding-left: 43px;
+    }
+
+    /* 内容区 */
+    .content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      background-color: var(--content-bg);
+    }
+
+    .content .card {
+      background-color: var(--card-bg);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+    }
+
+    .content h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--text-color);
+    }
+
+    .content h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 24px 0 16px;
+      color: var(--text-color);
+    }
+
+    .content h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 12px;
+      color: var(--text-color);
+    }
+
+    .content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 16px 0 8px;
+      color: var(--text-color);
+    }
+
+    .content p {
+      margin-bottom: 16px;
+      line-height: 1.8;
+      color: var(--text-color);
+    }
+
+    .content ul {
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+
+    .content ul li {
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    .content ol {
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+
+    .content ol li {
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    .content img {
+      max-width: 100%;
+      height: auto;
+      margin: 16px 0;
+      border-radius: 4px;
+    }
+
+    .content code {
+      background-color: var(--bg-light);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+    }
+
+    .content pre {
+      background-color: var(--bg-light);
+      padding: 16px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .content pre code {
+      background-color: transparent;
+      padding: 0;
+    }
+
+    /* 食材和工具区域 */
+    .content .ingredients {
+      background-color: var(--bg-light);
+      padding: 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .content .ingredients h4 {
+      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    /* 步骤区域 */
+    .content .steps {
+      counter-reset: step;
+    }
+
+    .content .steps li {
+      counter-increment: step;
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .content .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .header .nav {
+        display: none;
+      }
+
+      .sidebar {
+        width: 200px;
+      }
+
+      .content {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部导航栏 -->
+    <div class="header">
+      <div class="logo">
+        <img src="logo.png" alt="Logo">
+        <span>HowToCook</span>
+      </div>
+      <div class="nav">
+        <div class="nav-item active">做菜之前</div>
+        <div class="nav-item">菜谱</div>
+        <div class="nav-item">进阶知识学习</div>
+      </div>
+      <div class="actions">
+        <div class="search">
+          <input type="text" placeholder="搜索菜谱...">
+          <button>搜索</button>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+      </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main">
+      <!-- 侧边栏 -->
+      <div class="sidebar">
+        <!-- 做菜之前 -->
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">做菜之前</div>
+          <ul>
+            <li class="active" data-file="tips/厨房准备.md">厨房准备</li>
+            <li data-file="tips/如何选择现在吃什么.md">如何选择现在吃什么</li>
+            <li data-file="tips/食材相克与禁忌.md">食材相克与禁忌</li>
+            <li class="submenu-title">厨房工具</li>
+            <li class="submenu-item" data-file="tips/learn/高压力锅.md">高压力锅</li>
+            <li class="submenu-item" data-file="tips/learn/空气炸锅.md">空气炸锅</li>
+            <li class="submenu-item" data-file="tips/learn/微波炉.md">微波炉</li>
+            <li class="submenu-title">烹饪技巧</li>
+            <li class="submenu-item" data-file="tips/learn/去腥.md">去腥</li>
+            <li class="submenu-item" data-file="tips/learn/学习焯水.md">学习焯水</li>
+            <li class="submenu-item" data-file="tips/learn/学习炒与煎.md">学习炒与煎</li>
+            <li class="submenu-item" data-file="tips/learn/学习凉拌.md">学习凉拌</li>
+            <li class="submenu-item" data-file="tips/learn/学习腌.md">学习腌</li>
+            <li class="submenu-item" data-file="tips/learn/学习蒸.md">学习蒸</li>
+            <li class="submenu-item" data-file="tips/learn/学习煮.md">学习煮</li>
+            <li class="submenu-item" data-file="tips/learn/食品安全.md">食品安全</li>
+          </ul>
+        </div>
+
+        <!-- 菜谱 -->
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">菜谱</div>
+          <ul>
+            <li class="submenu-title expandable" data-file="starsystem/1Star.md">按难度索引</li>
+            <li class="submenu-item" data-file="starsystem/0Star.md">0星难度</li>
+            <li class="submenu-item" data-file="starsystem/1Star.md">1星难度</li>
+            <li class="submenu-item" data-file="starsystem/2Star.md">2星难度</li>
+            <li class="submenu-item" data-file="starsystem/3Star.md">3星难度</li>
+            <li class="submenu-item" data-file="starsystem/4Star.md">4星难度</li>
+            <li class="submenu-item" data-file="starsystem/5Star.md">5星难度</li>
+            <li class="submenu-item" data-file="starsystem/7Star.md">7星难度</li>
+            <li class="submenu-item" data-file="starsystem/8Star.md">8星难度</li>
+            <li class="submenu-title expandable">素菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/拔丝土豆/拔丝土豆.md">拔丝土豆</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/白灼菜心/白灼菜心.md">白灼菜心</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/包菜炒鸡蛋粉丝/包菜炒鸡蛋粉丝.md">包菜炒鸡蛋粉丝</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/菠菜炒鸡蛋/菠菜炒鸡蛋.md">菠菜炒鸡蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/炒滑蛋/炒滑蛋.md">炒滑蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/炒茄子.md">炒茄子</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/炒青菜.md">炒青菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/葱煎豆腐.md">葱煎豆腐</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/脆皮豆腐.md">脆皮豆腐</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/地三鲜.md">地三鲜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/干锅花菜/干锅花菜.md">干锅花菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/蚝油三鲜菇/蚝油三鲜菇.md">蚝油三鲜菇</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/蚝油生菜.md">蚝油生菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/红烧冬瓜/红烧冬瓜.md">红烧冬瓜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/红烧茄子.md">红烧茄子</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/虎皮青椒/虎皮青椒.md">虎皮青椒</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/话梅煮毛豆/话梅煮毛豆.md">话梅煮毛豆</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/鸡蛋羹/鸡蛋羹.md">鸡蛋羹</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/鸡蛋羹/微波炉鸡蛋羹.md">微波炉鸡蛋羹</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/鸡蛋羹/蒸箱鸡蛋羹.md">蒸箱鸡蛋羹</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/鸡蛋花/鸡蛋花.md">鸡蛋花</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/鸡蛋火腿炒黄瓜.md">鸡蛋火腿炒黄瓜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/茄子炖土豆.md">茄子炖土豆</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/家常日本豆腐.md">家常日本豆腐</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/椒盐玉米/椒盐玉米.md">椒盐玉米</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/金钱蛋.md">金钱蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/金针菇日本豆腐煲.md">金针菇日本豆腐煲</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/烤茄子/烤茄子.md">烤茄子</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/榄菜肉末四季豆/榄菜肉末四季豆.md">榄菜肉末四季豆</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/雷椒皮蛋.md">雷椒皮蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌豆腐.md">凉拌豆腐</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌黄瓜.md">凉拌黄瓜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌金针菇.md">凉拌金针菇</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌木耳/凉拌木耳.md">凉拌木耳</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌莴笋/凉拌莴笋.md">凉拌莴笋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/凉拌油麦菜.md">凉拌油麦菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/皮蛋豆腐.md">皮蛋豆腐</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/蒲烧茄子.md">蒲烧茄子</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/芹菜拌茶树菇/芹菜拌茶树菇.md">芹菜拌茶树菇</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/清炒花菜.md">清炒花菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/清蒸南瓜.md">清蒸南瓜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/陕北熬豆角.md">陕北熬豆角</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/上汤娃娃菜/上汤娃娃菜.md">上汤娃娃菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/手撕包菜/手撕包菜.md">手撕包菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/水油焖蔬菜.md">水油焖蔬菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/松仁玉米.md">松仁玉米</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/素炒豆角.md">素炒豆角</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/酸辣土豆丝.md">酸辣土豆丝</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/蒜蓉空心菜/蒜蓉空心菜.md">蒜蓉空心菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/蒜蓉西兰花.md">蒜蓉西兰花</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/糖拌西红柿/糖拌西红柿.md">糖拌西红柿</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/莴笋叶煎饼/莴笋叶煎饼.md">莴笋叶煎饼</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/西红柿炒鸡蛋.md">西红柿炒鸡蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/西红柿豆腐汤羹/西红柿豆腐汤羹.md">西红柿豆腐汤羹</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/西葫芦炒鸡蛋/西葫芦炒鸡蛋.md">西葫芦炒鸡蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/小炒藕丁/小炒藕丁.md">小炒藕丁</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/洋葱炒鸡蛋/洋葱炒鸡蛋.md">洋葱炒鸡蛋</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/印度葫芦丸子.md">印度葫芦丸子</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/印度土豆花菜.md">印度土豆花菜</li>
+            <li class="submenu-item" data-file="dishes/vegetable_dish/油醋爆蛋.md">油醋爆蛋</li>
+            <li class="submenu-title expandable">荤菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/巴基斯坦牛肉咖喱/巴基斯坦牛肉咖喱.md">巴基斯坦牛肉咖喱</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/白菜猪肉炖粉条.md">白菜猪肉炖粉条</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/豉汁排骨.md">豉汁排骨</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/豉汁蒸白鱔/豉汁蒸白鱔.md">豉汁蒸白鱔</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/带把肘子.md">带把肘子</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/冬瓜酿肉/冬瓜酿肉.md">冬瓜酿肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/豆豉鲮鱼油麦菜/豆豉鲮鱼油麦菜.md">豆豉鲮鱼油麦菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/番茄红酱.md">番茄红酱</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/粉蒸肉.md">粉蒸肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/腐乳肉.md">腐乳肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/干煸仔鸡/干煸仔鸡.md">干煸仔鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/宫保鸡丁/宫保鸡丁.md">宫保鸡丁</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/咕噜肉.md">咕噜肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/广式萝卜牛腩/广式萝卜牛腩.md">广式萝卜牛腩</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/贵州辣子鸡/贵州辣子鸡.md">贵州辣子鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/荷兰豆炒腊肠/荷兰豆炒腊肠.md">荷兰豆炒腊肠</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/黑椒牛柳/黑椒牛柳.md">黑椒牛柳</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/红烧鸡翅.md">红烧鸡翅</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/红烧肉/简易红烧肉.md">简易红烧肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/红烧肉/南派红烧肉.md">南派红烧肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/红烧猪蹄/红烧猪蹄.md">红烧猪蹄</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/湖南家常红烧肉/湖南家常红烧肉.md">湖南家常红烧肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/虎皮肘子.md">虎皮肘子</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/黄瓜炒肉.md">黄瓜炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/黄焖鸡.md">黄焖鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/黄油鸡.md">黄油鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/徽派红烧肉/徽派红烧肉.md">徽派红烧肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/回锅肉/回锅肉.md">回锅肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/尖椒炒牛肉.md">尖椒炒牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/尖叫牛蛙/尖叫牛蛙.md">尖叫牛蛙</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/煎烤羊排/煎烤羊排.md">煎烤羊排</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/姜炒鸡/姜炒鸡.md">姜炒鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/姜葱捞鸡/姜葱捞鸡.md">姜葱捞鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/酱牛肉/酱牛肉.md">酱牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/酱排骨/酱排骨.md">酱排骨</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/茭白炒肉/茭白炒肉.md">茭白炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/椒盐排条.md">椒盐排条</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/芥末罗氏虾/芥末罗氏虾.md">芥末罗氏虾</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/咖喱肥牛/咖喱肥牛.md">咖喱肥牛</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/烤鸡翅.md">烤鸡翅</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/可乐鸡翅.md">可乐鸡翅</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/口水鸡/口水鸡.md">口水鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/辣椒炒肉.md">辣椒炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/老妈蹄花/老妈蹄花.md">老妈蹄花</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/老式锅包肉/老式锅包肉.md">老式锅包肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/冷吃兔.md">冷吃兔</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/荔枝肉/荔枝肉.md">荔枝肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/凉拌鸡丝/凉拌鸡丝.md">凉拌鸡丝</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/卤菜/卤菜.md">卤菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/萝卜炖羊排.md">萝卜炖羊排</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/麻辣香锅.md">麻辣香锅</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/麻婆豆腐/麻婆豆腐.md">麻婆豆腐</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/蚂蚁上树.md">蚂蚁上树</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/梅菜扣肉/梅菜扣肉.md">梅菜扣肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/奶酪培根通心粉/奶酪培根通心粉.md">奶酪培根通心粉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/牛排/牛排.md">牛排</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/农家一碗香/农家一碗香.md">农家一碗香</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/啤酒鸭/啤酒鸭.md">啤酒鸭</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/黔式腊肠娃娃菜/黔式腊肠娃娃菜.md">黔式腊肠娃娃菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/青椒土豆炒肉/青椒土豆炒肉.md">青椒土豆炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/清蒸鳜鱼/清蒸鳜鱼.md">清蒸鳜鱼</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/肉饼炖蛋.md">肉饼炖蛋</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/杀猪菜.md">杀猪菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/山西过油肉.md">山西过油肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/商芝肉.md">商芝肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/瘦肉土豆片/瘦肉土豆片.md">瘦肉土豆片</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/水煮牛肉/水煮牛肉.md">水煮牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/水煮肉片.md">水煮肉片</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/蒜苔炒肉末.md">蒜苔炒肉末</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/台式卤肉饭/台式卤肉饭.md">台式卤肉饭</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/糖醋里脊.md">糖醋里脊</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/糖醋排骨/糖醋排骨.md">糖醋排骨</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/甜辣烤全翅.md">甜辣烤全翅</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/土豆炖排骨/土豆炖排骨.md">土豆炖排骨</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/无骨鸡爪/无骨鸡爪.md">无骨鸡爪</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/西红柿牛腩/西红柿牛腩.md">西红柿牛腩</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/西红柿土豆炖牛肉/西红柿土豆炖牛肉.md">西红柿土豆炖牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/乡村啤酒鸭.md">乡村啤酒鸭</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/香干芹菜炒肉/香干芹菜炒肉.md">香干芹菜炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/香干肉丝.md">香干肉丝</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/香菇滑鸡/香菇滑鸡.md">香菇滑鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/香煎五花肉/香煎五花肉.md">香煎五花肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/香辣鸡爪煲/香辣鸡爪煲.md">香辣鸡爪煲</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/湘祁米夫鸭/湘祁米夫鸭.md">湘祁米夫鸭</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/小炒黄牛肉/小炒黄牛肉.md">小炒黄牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/小炒鸡肝/小炒鸡肝.md">小炒鸡肝</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/小炒肉.md">小炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/小米辣炒肉.md">小米辣炒肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/小酥肉.md">小酥肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/新疆大盘鸡/新疆大盘鸡.md">新疆大盘鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/血浆鸭/血浆鸭.md">血浆鸭</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/羊排焖面/羊排焖面.md">羊排焖面</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/洋葱炒猪肉.md">洋葱炒猪肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/意式烤鸡.md">意式烤鸡</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/鱼香茄子/鱼香茄子.md">鱼香茄子</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/鱼香肉丝.md">鱼香肉丝</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/枝竹羊腩煲/枝竹羊腩煲.md">枝竹羊腩煲</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/猪皮冻/猪皮冻.md">猪皮冻</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/猪肉烩酸菜.md">猪肉烩酸菜</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/柱候牛腩/柱候牛腩.md">柱候牛腩</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/孜然牛肉.md">孜然牛肉</li>
+            <li class="submenu-item" data-file="dishes/meat_dish/醉排骨/醉排骨.md">醉排骨</li>
+            
+            <li class="submenu-title expandable">水产</li>
+            <li class="submenu-item" data-file="dishes/aquatic/白灼虾/白灼虾.md">白灼虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/鳊鱼炖豆腐/鳊鱼炖豆腐.md">鳊鱼炖豆腐</li>
+            <li class="submenu-item" data-file="dishes/aquatic/蛏抱蛋/蛏抱蛋.md">蛏抱蛋</li>
+            <li class="submenu-item" data-file="dishes/aquatic/葱烧海参/葱烧海参.md">葱烧海参</li>
+            <li class="submenu-item" data-file="dishes/aquatic/葱油桂鱼/葱油桂鱼.md">葱油桂鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/干煎阿根廷红虾/干煎阿根廷红虾.md">干煎阿根廷红虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/红烧鲤鱼.md">红烧鲤鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/红烧鱼.md">红烧鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/红烧鱼头.md">红烧鱼头</li>
+            <li class="submenu-item" data-file="dishes/aquatic/黄油煎虾/黄油煎虾.md">黄油煎虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/混合烤鱼/烤鱼.md">烤鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/酱炖蟹.md">酱炖蟹</li>
+            <li class="submenu-item" data-file="dishes/aquatic/芥末黄油罗氏虾/芥末黄油罗氏虾.md">芥末黄油罗氏虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/咖喱炒蟹.md">咖喱炒蟹</li>
+            <li class="submenu-item" data-file="dishes/aquatic/鲤鱼炖白菜/鲤鱼炖白菜.md">鲤鱼炖白菜</li>
+            <li class="submenu-item" data-file="dishes/aquatic/清蒸鲈鱼/清蒸鲈鱼.md">清蒸鲈鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/清蒸生蚝.md">清蒸生蚝</li>
+            <li class="submenu-item" data-file="dishes/aquatic/肉蟹煲.md">肉蟹煲</li>
+            <li class="submenu-item" data-file="dishes/aquatic/水煮鱼.md">水煮鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/蒜蓉虾/蒜蓉虾.md">蒜蓉虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/蒜香黄油虾/蒜香黄油虾.md">蒜香黄油虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/糖醋鲤鱼/糖醋鲤鱼.md">糖醋鲤鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/微波葱姜黑鳕鱼.md">微波葱姜黑鳕鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/香煎翘嘴鱼/香煎翘嘴鱼.md">香煎翘嘴鱼</li>
+            <li class="submenu-item" data-file="dishes/aquatic/响油鳝丝.md">响油鳝丝</li>
+            <li class="submenu-item" data-file="dishes/aquatic/小龙虾/小龙虾.md">小龙虾</li>
+            <li class="submenu-item" data-file="dishes/aquatic/油焖大虾/油焖大虾.md">油焖大虾</li>
+            
+            <li class="submenu-title expandable">早餐</li>
+            <li class="submenu-item" data-file="dishes/breakfast/茶叶蛋.md">茶叶蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/蛋煎糍粑.md">蛋煎糍粑</li>
+            <li class="submenu-item" data-file="dishes/breakfast/桂圆红枣粥.md">桂圆红枣粥</li>
+            <li class="submenu-item" data-file="dishes/breakfast/鸡蛋三明治.md">鸡蛋三明治</li>
+            <li class="submenu-item" data-file="dishes/breakfast/煎饺.md">煎饺</li>
+            <li class="submenu-item" data-file="dishes/breakfast/金枪鱼酱三明治.md">金枪鱼酱三明治</li>
+            <li class="submenu-item" data-file="dishes/breakfast/空气炸锅面包片.md">空气炸锅面包片</li>
+            <li class="submenu-item" data-file="dishes/breakfast/美式炒蛋.md">美式炒蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/牛奶燕麦.md">牛奶燕麦</li>
+            <li class="submenu-item" data-file="dishes/breakfast/手抓饼.md">手抓饼</li>
+            <li class="submenu-item" data-file="dishes/breakfast/水煮玉米.md">水煮玉米</li>
+            <li class="submenu-item" data-file="dishes/breakfast/苏格兰蛋/苏格兰蛋.md">苏格兰蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/太阳蛋.md">太阳蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/溏心蛋.md">溏心蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/吐司果酱.md">吐司果酱</li>
+            <li class="submenu-item" data-file="dishes/breakfast/完美水煮蛋.md">完美水煮蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/微波炉蛋糕.md">微波炉蛋糕</li>
+            <li class="submenu-item" data-file="dishes/breakfast/微波炉荷包蛋.md">微波炉荷包蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/微波炉蒸蛋.md">微波炉蒸蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/温泉蛋/温泉蛋.md">温泉蛋</li>
+            <li class="submenu-item" data-file="dishes/breakfast/燕麦鸡蛋饼.md">燕麦鸡蛋饼</li>
+            <li class="submenu-item" data-file="dishes/breakfast/蒸花卷.md">蒸花卷</li>
+            <li class="submenu-item" data-file="dishes/breakfast/蒸水蛋.md">蒸水蛋</li>
+            
+            <li class="submenu-title expandable">主食</li>
+            <li class="submenu-item" data-file="dishes/staple/炒方便面.md">炒方便面</li>
+            <li class="submenu-item" data-file="dishes/staple/炒河粉.md">炒河粉</li>
+            <li class="submenu-item" data-file="dishes/staple/炒凉粉/炒凉粉.md">炒凉粉</li>
+            <li class="submenu-item" data-file="dishes/staple/炒馍.md">炒馍</li>
+            <li class="submenu-item" data-file="dishes/staple/炒年糕.md">炒年糕</li>
+            <li class="submenu-item" data-file="dishes/staple/炒意大利面/炒意大利面.md">炒意大利面</li>
+            <li class="submenu-item" data-file="dishes/staple/葱油拌面.md">葱油拌面</li>
+            <li class="submenu-item" data-file="dishes/staple/蛋包饭.md">蛋包饭</li>
+            <li class="submenu-item" data-file="dishes/staple/蛋炒饭.md">蛋炒饭</li>
+            <li class="submenu-item" data-file="dishes/staple/电饭煲三文鱼炊饭/电饭煲三文鱼炊饭.md">电饭煲三文鱼炊饭</li>
+            <li class="submenu-item" data-file="dishes/staple/豆角焖面/豆角焖面.md">豆角焖面</li>
+            <li class="submenu-item" data-file="dishes/staple/韩式拌饭/韩式拌饭.md">韩式拌饭</li>
+            <li class="submenu-item" data-file="dishes/staple/河南蒸面条/河南蒸面条.md">河南蒸面条</li>
+            <li class="submenu-item" data-file="dishes/staple/红芸豆拌饭.md">红芸豆拌饭</li>
+            <li class="submenu-item" data-file="dishes/staple/火腿饭团/火腿饭团.md">火腿饭团</li>
+            <li class="submenu-item" data-file="dishes/staple/基础牛奶面包/基础牛奶面包.md">基础牛奶面包</li>
+            <li class="submenu-item" data-file="dishes/staple/茄子肉煎饼/茄子肉煎饼.md">茄子肉煎饼</li>
+            <li class="submenu-item" data-file="dishes/staple/鲣鱼海苔玉米饭/鲣鱼海苔玉米饭.md">鲣鱼海苔玉米饭</li>
+            <li class="submenu-item" data-file="dishes/staple/酱拌荞麦面/酱拌荞麦面.md">酱拌荞麦面</li>
+            <li class="submenu-item" data-file="dishes/staple/韭菜盒子.md">韭菜盒子</li>
+            <li class="submenu-item" data-file="dishes/staple/可乐炒饭.md">可乐炒饭</li>
+            <li class="submenu-item" data-file="dishes/staple/空气炸锅照烧鸡饭/空气炸锅照烧鸡饭.md">空气炸锅照烧鸡饭</li>
+            <li class="submenu-item" data-file="dishes/staple/醪糟小汤圆.md">醪糟小汤圆</li>
+            <li class="submenu-item" data-file="dishes/staple/老干妈拌面.md">老干妈拌面</li>
+            <li class="submenu-item" data-file="dishes/staple/老友猪肉粉/老友猪肉粉.md">老友猪肉粉</li>
+            <li class="submenu-item" data-file="dishes/staple/烙饼/烙饼.md">烙饼</li>
+            <li class="submenu-item" data-file="dishes/staple/利提巧卡.md">利提巧卡</li>
+            <li class="submenu-item" data-file="dishes/staple/凉粉/凉粉.md">凉粉</li>
+            <li class="submenu-item" data-file="dishes/staple/螺蛳粉.md">螺蛳粉</li>
+            <li class="submenu-item" data-file="dishes/staple/麻辣减脂荞麦面.md">麻辣减脂荞麦面</li>
+            <li class="submenu-item" data-file="dishes/staple/麻油拌面.md">麻油拌面</li>
+            <li class="submenu-item" data-file="dishes/staple/米饭/电饭煲蒸米饭.md">电饭煲蒸米饭</li>
+            <li class="submenu-item" data-file="dishes/staple/米饭/煮锅蒸米饭.md">煮锅蒸米饭</li>
+            <li class="submenu-item" data-file="dishes/staple/披萨饼皮/披萨饼皮.md">披萨饼皮</li>
+            <li class="submenu-item" data-file="dishes/staple/热干面.md">热干面</li>
+            <li class="submenu-item" data-file="dishes/staple/日式肥牛丼饭/日式肥牛丼饭.md">日式肥牛丼饭</li>
+            <li class="submenu-item" data-file="dishes/staple/日式咖喱饭/日式咖喱饭.md">日式咖喱饭</li>
+            <li class="submenu-item" data-file="dishes/staple/肉蛋盖饭.md">肉蛋盖饭</li>
+            <li class="submenu-item" data-file="dishes/staple/陕西油泼面/陕西油泼面.md">陕西油泼面</li>
+            <li class="submenu-item" data-file="dishes/staple/烧饼/芝麻烧饼.md">芝麻烧饼</li>
+            <li class="submenu-item" data-file="dishes/staple/手工水饺.md">手工水饺</li>
+            <li class="submenu-item" data-file="dishes/staple/酸辣蕨根粉.md">酸辣蕨根粉</li>
+            <li class="submenu-item" data-file="dishes/staple/汤面.md">汤面</li>
+            <li class="submenu-item" data-file="dishes/staple/微波炉腊肠煲仔饭/微波炉腊肠煲仔饭.md">微波炉腊肠煲仔饭</li>
+            <li class="submenu-item" data-file="dishes/staple/西红柿鸡蛋挂面/西红柿鸡蛋挂面.md">西红柿鸡蛋挂面</li>
+            <li class="submenu-item" data-file="dishes/staple/鲜肉烧卖.md">鲜肉烧卖</li>
+            <li class="submenu-item" data-file="dishes/staple/咸肉菜饭.md">咸肉菜饭</li>
+            <li class="submenu-item" data-file="dishes/staple/扬州炒饭/扬州炒饭.md">扬州炒饭</li>
+            <li class="submenu-item" data-file="dishes/staple/意式肉酱面/意式肉酱面.md">意式肉酱面</li>
+            <li class="submenu-item" data-file="dishes/staple/印度烤饼.md">印度烤饼</li>
+            <li class="submenu-item" data-file="dishes/staple/印度焖饭.md">印度焖饭</li>
+            <li class="submenu-item" data-file="dishes/staple/鹰嘴豆炸饼.md">鹰嘴豆炸饼</li>
+            <li class="submenu-item" data-file="dishes/staple/炸酱面.md">炸酱面</li>
+            <li class="submenu-item" data-file="dishes/staple/照烧鸡腿饭.md">照烧鸡腿饭</li>
+            <li class="submenu-item" data-file="dishes/staple/蒸卤面.md">蒸卤面</li>
+            <li class="submenu-item" data-file="dishes/staple/中式馅饼/中式馅饼.md">中式馅饼</li>
+            <li class="submenu-item" data-file="dishes/staple/猪油拌饭.md">猪油拌饭</li>
+            <li class="submenu-item" data-file="dishes/staple/煮泡面加蛋.md">煮泡面加蛋</li>
+            
+            <li class="submenu-title expandable">半成品加工</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/半成品意面.md">半成品意面</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/空气炸锅鸡翅中/空气炸锅鸡翅中.md">空气炸锅鸡翅中</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/空气炸锅羊排/空气炸锅羊排.md">空气炸锅羊排</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/懒人蛋挞/懒人蛋挞.md">懒人蛋挞</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/凉皮.md">凉皮</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/牛油火锅底料.md">牛油火锅底料</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/速冻馄饨.md">速冻馄饨</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/速冻水饺.md">速冻水饺</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/速冻汤圆/速冻汤圆.md">速冻汤圆</li>
+            <li class="submenu-item" data-file="dishes/semi-finished/炸薯条/炸薯条.md">炸薯条</li>
+            
+            <li class="submenu-title expandable">汤与粥</li>
+            <li class="submenu-item" data-file="dishes/soup/昂刺鱼豆腐汤/昂刺鱼豆腐汤.md">昂刺鱼豆腐汤</li>
+            <li class="submenu-item" data-file="dishes/soup/陈皮排骨汤/陈皮排骨汤.md">陈皮排骨汤</li>
+            <li class="submenu-item" data-file="dishes/soup/番茄牛肉蛋花汤.md">番茄牛肉蛋花汤</li>
+            <li class="submenu-item" data-file="dishes/soup/勾芡香菇汤/勾芡香菇汤.md">勾芡香菇汤</li>
+            <li class="submenu-item" data-file="dishes/soup/黄瓜皮蛋汤.md">黄瓜皮蛋汤</li>
+            <li class="submenu-item" data-file="dishes/soup/金针菇汤.md">金针菇汤</li>
+            <li class="submenu-item" data-file="dishes/soup/菌菇炖乳鸽/菌菇炖乳鸽.md">菌菇炖乳鸽</li>
+            <li class="submenu-item" data-file="dishes/soup/腊八粥.md">腊八粥</li>
+            <li class="submenu-item" data-file="dishes/soup/罗宋汤.md">罗宋汤</li>
+            <li class="submenu-item" data-file="dishes/soup/米粥.md">米粥</li>
+            <li class="submenu-item" data-file="dishes/soup/奶油蘑菇汤.md">奶油蘑菇汤</li>
+            <li class="submenu-item" data-file="dishes/soup/排骨苦瓜汤/排骨苦瓜汤.md">排骨苦瓜汤</li>
+            <li class="submenu-item" data-file="dishes/soup/皮蛋瘦肉粥.md">皮蛋瘦肉粥</li>
+            <li class="submenu-item" data-file="dishes/soup/生汆丸子汤.md">生汆丸子汤</li>
+            <li class="submenu-item" data-file="dishes/soup/西红柿鸡蛋汤.md">西红柿鸡蛋汤</li>
+            <li class="submenu-item" data-file="dishes/soup/小米粥.md">小米粥</li>
+            <li class="submenu-item" data-file="dishes/soup/羊肉汤/羊肉汤.md">羊肉汤</li>
+            <li class="submenu-item" data-file="dishes/soup/银耳莲子粥/银耳莲子粥.md">银耳莲子粥</li>
+            <li class="submenu-item" data-file="dishes/soup/玉米排骨汤/玉米排骨汤.md">玉米排骨汤</li>
+            <li class="submenu-item" data-file="dishes/soup/朱雀汤/朱雀汤.md">朱雀汤</li>
+            <li class="submenu-item" data-file="dishes/soup/紫菜蛋花汤.md">紫菜蛋花汤</li>
+            
+            <li class="submenu-title expandable">饮料</li>
+            <li class="submenu-item" data-file="dishes/drink/耙耙柑茶/耙耙柑茶.md">耙耙柑茶</li>
+            <li class="submenu-item" data-file="dishes/drink/百香果橙子特调/百香果橙子特调.md">百香果橙子特调</li>
+            <li class="submenu-item" data-file="dishes/drink/冰粉/冰粉.md">冰粉</li>
+            <li class="submenu-item" data-file="dishes/drink/菠萝咖啡特调/菠萝咖啡特调.md">菠萝咖啡特调</li>
+            <li class="submenu-item" data-file="dishes/drink/冬瓜茶.md">冬瓜茶</li>
+            <li class="submenu-item" data-file="dishes/drink/海边落日/海边落日.md">海边落日</li>
+            <li class="submenu-item" data-file="dishes/drink/金菲士/金菲士.md">金菲士</li>
+            <li class="submenu-item" data-file="dishes/drink/金汤力/金汤力.md">金汤力</li>
+            <li class="submenu-item" data-file="dishes/drink/酒酿醪糟/酒酿醪糟.md">酒酿醪糟</li>
+            <li class="submenu-item" data-file="dishes/drink/可乐桶.md">可乐桶</li>
+            <li class="submenu-item" data-file="dishes/drink/奶茶.md">奶茶</li>
+            <li class="submenu-item" data-file="dishes/drink/柠檬水/柠檬水.md">柠檬水</li>
+            <li class="submenu-item" data-file="dishes/drink/奇异果菠菜特调/奇异果菠菜特调.md">奇异果菠菜特调</li>
+            <li class="submenu-item" data-file="dishes/drink/砂糖椰子冰沙/砂糖椰子冰沙.md">砂糖椰子冰沙</li>
+            <li class="submenu-item" data-file="dishes/drink/酸梅汤/酸梅汤.md">酸梅汤</li>
+            <li class="submenu-item" data-file="dishes/drink/酸梅汤（半成品加工）.md">酸梅汤（半成品加工）</li>
+            <li class="submenu-item" data-file="dishes/drink/泰国手标红茶/泰国手标红茶.md">泰国手标红茶</li>
+            <li class="submenu-item" data-file="dishes/drink/杨枝甘露.md">杨枝甘露</li>
+            <li class="submenu-item" data-file="dishes/drink/印度奶茶.md">印度奶茶</li>
+            <li class="submenu-item" data-file="dishes/drink/长岛冰茶.md">长岛冰茶</li>
+            <li class="submenu-item" data-file="dishes/drink/B52轰炸机.md">B52轰炸机</li>
+            <li class="submenu-item" data-file="dishes/drink/Mojito莫吉托.md">Mojito莫吉托</li>
+            
+            <li class="submenu-title expandable">酱料和其它材料</li>
+            <li class="submenu-item" data-file="dishes/condiment/草莓酱/草莓酱.md">草莓酱</li>
+            <li class="submenu-item" data-file="dishes/condiment/葱油.md">葱油</li>
+            <li class="submenu-item" data-file="dishes/condiment/简易版炒糖色.md">简易版炒糖色</li>
+            <li class="submenu-item" data-file="dishes/condiment/蒜香酱油.md">蒜香酱油</li>
+            <li class="submenu-item" data-file="dishes/condiment/糖醋汁.md">糖醋汁</li>
+            <li class="submenu-item" data-file="dishes/condiment/油泼辣子/油泼辣子.md">油泼辣子</li>
+            <li class="submenu-item" data-file="dishes/condiment/油酥.md">油酥</li>
+            <li class="submenu-item" data-file="dishes/condiment/炸串酱料.md">炸串酱料</li>
+            <li class="submenu-item" data-file="dishes/condiment/蔗糖糖浆/蔗糖糖浆.md">蔗糖糖浆</li>
+            
+            <li class="submenu-title expandable">甜品</li>
+            <li class="submenu-item" data-file="dishes/dessert/奥利奥冰淇淋/奥利奥冰淇淋.md">奥利奥冰淇淋</li>
+            <li class="submenu-item" data-file="dishes/dessert/草莓冰淇淋/草莓冰淇淋.md">草莓冰淇淋</li>
+            <li class="submenu-item" data-file="dishes/dessert/反沙芋头/反沙芋头.md">反沙芋头</li>
+            <li class="submenu-item" data-file="dishes/dessert/龟苓膏/龟苓膏.md">龟苓膏</li>
+            <li class="submenu-item" data-file="dishes/dessert/红柚蛋糕/红柚蛋糕.md">红柚蛋糕</li>
+            <li class="submenu-item" data-file="dishes/dessert/胡萝卜甜糕.md">胡萝卜甜糕</li>
+            <li class="submenu-item" data-file="dishes/dessert/咖啡椰奶冻/咖啡椰奶冻.md">咖啡椰奶冻</li>
+            <li class="submenu-item" data-file="dishes/dessert/烤蛋挞/烤蛋挞.md">烤蛋挞</li>
+            <li class="submenu-item" data-file="dishes/dessert/烤箱版巴斯克芝士蛋糕/烤箱版巴斯克芝士蛋糕.md">烤箱版巴斯克芝士蛋糕</li>
+            <li class="submenu-item" data-file="dishes/dessert/玛格丽特饼干/玛格丽特饼干.md">玛格丽特饼干</li>
+            <li class="submenu-item" data-file="dishes/dessert/魔芋蛋糕/魔芋蛋糕.md">魔芋蛋糕</li>
+            <li class="submenu-item" data-file="dishes/dessert/戚风蛋糕/戚风蛋糕.md">戚风蛋糕</li>
+            <li class="submenu-item" data-file="dishes/dessert/酸奶意式奶冻/酸奶意式奶冻.md">酸奶意式奶冻</li>
+            <li class="submenu-item" data-file="dishes/dessert/提拉米苏/提拉米苏.md">提拉米苏</li>
+            <li class="submenu-item" data-file="dishes/dessert/无厨师机蜂蜜面包/无厨师机蜂蜜面包.md">无厨师机蜂蜜面包</li>
+            <li class="submenu-item" data-file="dishes/dessert/雪花酥/雪花酥.md">雪花酥</li>
+            <li class="submenu-item" data-file="dishes/dessert/英式司康/英式司康.md">英式司康</li>
+            <li class="submenu-item" data-file="dishes/dessert/芋泥雪媚娘/芋泥雪媚娘.md">芋泥雪媚娘</li>
+            <li class="submenu-item" data-file="dishes/dessert/炸鲜奶/炸鲜奶.md">炸鲜奶</li>
+          </ul>
+        </div>
+        
+        <!-- 进阶知识学习 -->
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">进阶知识学习</div>
+          <ul>
+            <li class="submenu-item" data-file="tips/advanced/辅料技巧.md">辅料技巧</li>
+            <li class="submenu-item" data-file="tips/advanced/高级专业术语.md">高级专业术语</li>
+            <li class="submenu-item" data-file="tips/advanced/糖色的炒制.md">糖色的炒制</li>
+            <li class="submenu-item" data-file="tips/advanced/油温判断技巧.md">油温判断技巧</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 内容区 -->
+      <div class="content">
+        <div class="card">
+          <h1>厨房准备</h1>
+          <p>在阅读和参考菜谱之前，假想你已经在厨房中准备好了下列物品。这些物品不会在原材料和工具部分提及。</p>
+          <div class="ingredients">
+            <h4>基础工具</h4>
+            <p>燃气灶，饮用水，炒锅，蒸锅，煮锅，电饭锅，食用油，洗菜盆，碟子，碗，筷子，勺子，汤勺，漏勺，洗涤剂</p>
+          </div>
+          <p>下列材料可能会被高频使用。建议提前为厨房采购好，并永远保障有新鲜的可以取用。</p>
+          <div class="ingredients">
+            <h4>常用调料</h4>
+            <p>大葱，小葱，生姜，大蒜，花椒，八角，桂皮，香叶，干辣椒，小米椒，生抽，老抽，料酒（黄酒，可选），黑醋，香醋，陈醋，白糖，豆腐乳，冰糖，棉白糖，盐，味精/鸡精，黑胡椒，白胡椒，五香粉，玉米淀粉，番薯淀粉</p>
+          </div>
+          <p>如果你需要应对突发情况或长期居家需求，建议同样采购好下列内容：</p>
+          <div class="ingredients">
+            <h4>储备食材</h4>
+            <p>冰箱，微波炉，保鲜膜，保鲜袋，鸡蛋，青椒，胡萝卜，黄瓜，西红柿，木耳，里脊肉，茄子，米，挂面或方便面</p>
+          </div>
+          <p>如果你非常想追求形式化、标准化和仪式感，并且想拥有一个与众不同的有趣厨房，那就同样采购下列内容：</p>
+          <div class="ingredients">
+            <h4>专业工具</h4>
+            <p>电子秤（厨房天平）、游标卡尺、量筒、停表、烧杯、测温枪、移液器</p>
+          </div>
+          <p>如果你想节约时间，可以购买半成品并简单处理后食用：</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 文件路径映射
+    const basePath = '../HowToCook';
+
+    // 加载 Markdown 文件
+    function loadMarkdownFile(filePath) {
+      const content = document.querySelector('.content');
+      content.innerHTML = `<div class="card"><h2>加载中...</h2><p>正在读取文件 ${filePath}...</p></div>`;
+
+      // 在 uTools 插件中，使用 Node.js 的 fs 模块读取文件
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const fullPath = path.join(__dirname, basePath, filePath);
+        
+        if (fs.existsSync(fullPath)) {
+            const text = fs.readFileSync(fullPath, 'utf8');
+            // 解析 Markdown 为 HTML
+            const html = marked.parse(text);
+            // 处理图片路径
+            const processedHtml = html.replace(/<img src="([^"]+)"/g, function(match, src) {
+              // 如果是绝对路径，直接返回
+              if (src.startsWith('http://') || src.startsWith('https://')) {
+                return match;
+              }
+              // 如果是相对路径，转换为相对于 HowToCook 目录的路径
+              const dirPath = path.dirname(fullPath);
+              const imgPath = path.join(dirPath, src);
+              const relativePath = path.relative(__dirname, imgPath);
+              return `<img src="${relativePath}"`;
+            });
+            content.innerHTML = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}">${processedHtml}</div>`;
+            // 为文件中的链接添加点击事件监听器
+            setTimeout(() => {
+              const links = content.querySelectorAll('.markdown-body a');
+              links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const text = this.textContent.trim();
+                  // 根据链接文本查找对应的菜谱文件
+                  findAndLoadRecipe(text);
+                });
+              });
+            }, 0);
+          } else {
+            throw new Error('文件不存在');
+          }
+      } catch (error) {
+        // 如果在浏览器中运行，尝试使用 XMLHttpRequest
+        if (error.message.includes('require is not defined')) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', `${basePath}/${filePath}`, true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200) {
+                // 解析 Markdown 为 HTML
+                const html = marked.parse(xhr.responseText);
+                // 处理图片路径
+                const processedHtml = html.replace(/<img src="([^"]+)"/g, function(match, src) {
+                  // 如果是绝对路径，直接返回
+                  if (src.startsWith('http://') || src.startsWith('https://')) {
+                    return match;
+                  }
+                  // 如果是相对路径，转换为相对于 basePath 的路径
+                  const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
+                  const imgPath = `${dirPath}/${src}`;
+                  return `<img src="${basePath}/${imgPath}"`;
+                });
+                content.innerHTML = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}">${processedHtml}</div>`;
+            // 为文件中的链接添加点击事件监听器
+            setTimeout(() => {
+              const links = content.querySelectorAll('.markdown-body a');
+              links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const text = this.textContent.trim();
+                  // 根据链接文本查找对应的菜谱文件
+                  findAndLoadRecipe(text);
+                });
+              });
+            }, 0);
+              } else {
+                content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：HTTP ${xhr.status}</p></div>`;
+                console.error('加载文件失败:', xhr.status);
+              }
+            }
+          };
+          xhr.send();
+        } else {
+          content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：${error.message}</p></div>`;
+          console.error('加载文件失败:', error);
+        }
+      }
+    }
+
+    // 根据菜谱名称查找对应的菜谱文件并加载
+    function findAndLoadRecipe(recipeName) {
+      // 遍历所有侧边栏菜单项，查找与菜谱名称匹配的项
+      const sidebarItems = document.querySelectorAll('.sidebar ul li');
+      let found = false;
+      
+      sidebarItems.forEach(item => {
+        if (item.textContent.trim() === recipeName) {
+          // 模拟点击事件，加载对应的菜谱文件
+          item.click();
+          found = true;
+        }
+      });
+      
+      if (!found) {
+        // 如果没有找到匹配的菜单项，显示错误信息
+        const content = document.querySelector('.content');
+        content.innerHTML = `<div class="card"><h2>加载失败</h2><p>未找到菜谱：${recipeName}</p></div>`;
+      }
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 侧边栏点击事件
+      const sidebarItems = document.querySelectorAll('.sidebar ul li');
+      sidebarItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // 检查是否是可伸缩的子菜单标题
+          if (this.classList.contains('submenu-title') && this.classList.contains('expandable')) {
+            // 切换展开/折叠状态
+            this.classList.toggle('collapsed');
+            
+            // 获取下一个兄弟元素
+            let nextElement = this.nextElementSibling;
+            
+            // 显示/隐藏所有子菜单项
+            while (nextElement && nextElement.classList.contains('submenu-item')) {
+              if (this.classList.contains('collapsed')) {
+                nextElement.style.display = 'none';
+              } else {
+                nextElement.style.display = 'block';
+              }
+              nextElement = nextElement.nextElementSibling;
+            }
+            
+            // 检查是否有 data-file 属性
+            const filePath = this.getAttribute('data-file');
+            if (filePath) {
+              // 移除所有活动状态
+              sidebarItems.forEach(i => i.classList.remove('active'));
+              // 添加当前活动状态
+              this.classList.add('active');
+              // 加载文件
+              loadMarkdownFile(filePath);
+            }
+          } else {
+            // 移除所有活动状态
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            // 添加当前活动状态
+            this.classList.add('active');
+            // 获取文件路径
+            const filePath = this.getAttribute('data-file');
+            if (filePath) {
+              // 加载文件
+              loadMarkdownFile(filePath);
+            }
+          }
+        });
+      });
+      
+      // 初始化：默认折叠所有子菜单
+      const expandableItems = document.querySelectorAll('.sidebar ul li.submenu-title.expandable');
+      expandableItems.forEach(item => {
+        item.classList.add('collapsed');
+        
+        // 隐藏所有子菜单项
+        let nextElement = item.nextElementSibling;
+        while (nextElement && nextElement.classList.contains('submenu-item')) {
+          nextElement.style.display = 'none';
+          nextElement = nextElement.nextElementSibling;
+        }
+      });
+
+      // 导航栏点击事件
+      const navItems = document.querySelectorAll('.nav-item');
+      const sidebarGroups = document.querySelectorAll('.sidebar-group');
+      
+      // 默认显示"做菜之前"的侧边栏组
+      sidebarGroups.forEach(group => {
+        if (group.querySelector('.sidebar-group-title').textContent === '做菜之前') {
+          group.style.display = 'block';
+        } else {
+          group.style.display = 'none';
+        }
+      });
+      
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // 移除所有活动状态
+          navItems.forEach(i => i.classList.remove('active'));
+          // 添加当前活动状态
+          this.classList.add('active');
+          
+          // 根据导航项显示对应的侧边栏组
+          const navText = this.textContent;
+          sidebarGroups.forEach(group => {
+            const groupTitle = group.querySelector('.sidebar-group-title').textContent;
+            if (groupTitle === navText) {
+              group.style.display = 'block';
+            } else {
+              group.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // 搜索功能
+      const searchButton = document.querySelector('.search button');
+      const searchInput = document.querySelector('.search input');
+      searchButton.addEventListener('click', function() {
+        const keyword = searchInput.value.trim();
+        if (keyword) {
+          const content = document.querySelector('.content');
+          // 遍历所有侧边栏菜单项，查找与搜索关键词匹配的项
+          const sidebarItems = document.querySelectorAll('.sidebar ul li');
+          const results = [];
+          
+          sidebarItems.forEach(item => {
+            const text = item.textContent.trim();
+            const filePath = item.getAttribute('data-file');
+            if (text.includes(keyword) && filePath) {
+              results.push({ text, filePath, element: item });
+            }
+          });
+          
+          // 显示搜索结果
+          if (results.length > 0) {
+            let html = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}"><h2>搜索结果: ${keyword}</h2><ul>`;
+            results.forEach(result => {
+              html += `<li><a href="#" data-file="${result.filePath}">${result.text}</a></li>`;
+            });
+            html += `</ul></div>`;
+            content.innerHTML = html;
+            
+            // 为搜索结果中的链接添加点击事件监听器
+            setTimeout(() => {
+              const links = content.querySelectorAll('.markdown-body a');
+              links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const filePath = this.getAttribute('data-file');
+                  if (filePath) {
+                    loadMarkdownFile(filePath);
+                  }
+                });
+              });
+            }, 0);
+          } else {
+            content.innerHTML = `<div class="card"><h2>搜索结果: ${keyword}</h2><p>未找到匹配的菜谱</p></div>`;
+          }
+        }
+      });
+
+      // 回车搜索
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchButton.click();
+        }
+      });
+
+      // 主题切换功能
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
+      
+      // 检查本地存储中的主题设置
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        body.classList.add('dark');
+        themeToggle.textContent = '☀️';
+      } else {
+        themeToggle.textContent = '🌙';
+      }
+
+      // 主题切换按钮点击事件
+      themeToggle.addEventListener('click', function() {
+        body.classList.toggle('dark');
+        if (body.classList.contains('dark')) {
+          themeToggle.textContent = '☀️';
+          localStorage.setItem('theme', 'dark');
+        } else {
+          themeToggle.textContent = '🌙';
+          localStorage.setItem('theme', 'light');
+        }
+        // 更新 Markdown 内容的主题
+        document.querySelectorAll('.markdown-body').forEach(element => {
+          if (body.classList.contains('dark')) {
+            element.classList.add('dark');
+          } else {
+            element.classList.remove('dark');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
