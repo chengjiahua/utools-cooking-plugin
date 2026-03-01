@@ -2,6 +2,17 @@
 
 这是 HowToCook 项目的 uTools 插件版本，将程序员做饭指南集成到 uTools 中，方便用户快速查阅菜谱和烹饪技巧。
 
+## 插件截图
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/chengjiahua/MarkdownPhotos/main/utools/cooking/1.png" width="400" />
+  <img src="https://raw.githubusercontent.com/chengjiahua/MarkdownPhotos/main/utools/cooking/2.png" width="400" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/chengjiahua/MarkdownPhotos/main/utools/cooking/3.png" width="400" />
+  <img src="https://raw.githubusercontent.com/chengjiahua/MarkdownPhotos/main/utools/cooking/4.png" width="400" />
+</p>
+
 ## 功能特点
 
 - 完整集成 HowToCook 项目的所有菜谱和烹饪技巧
