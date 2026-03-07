@@ -974,14 +974,13 @@
       const content = document.querySelector('.content');
       content.innerHTML = `<div class="card"><h2>加载中...</h2><p>正在读取文件 ${filePath}...</p></div>`;
 
-      // 在 uTools 插件中，使用 Node.js 的 fs 模块读取文件
-      try {
-        const fs = require('fs');
-        const path = require('path');
-        const fullPath = path.join(__dirname, basePath, filePath);
-        
-        if (fs.existsSync(fullPath)) {
-            const text = fs.readFileSync(fullPath, 'utf8');
+      // 使用 preload 暴露的 API 读取文件
+      if (window.FileSystem) {
+        window.FileSystem.readFile(filePath, function(error, text, fullPath) {
+          if (error) {
+            content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：${error.message}</p></div>`;
+            console.error('加载文件失败:', error);
+          } else {
             // 解析 Markdown 为 HTML
             const html = marked.parse(text);
             // 处理图片路径
@@ -991,9 +990,9 @@
                 return match;
               }
               // 如果是相对路径，转换为相对于 HowToCook 目录的路径
-              const dirPath = path.dirname(fullPath);
-              const imgPath = path.join(dirPath, src);
-              const relativePath = path.relative(__dirname, imgPath);
+              const dirPath = fullPath.substring(0, fullPath.lastIndexOf('/'));
+              const imgPath = dirPath + '/' + src;
+              const relativePath = window.FileSystem.getRelativePath(imgPath);
               return `<img src="${relativePath}"`;
             });
             content.innerHTML = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}">${processedHtml}</div>`;
@@ -1009,54 +1008,48 @@
                 });
               });
             }, 0);
-          } else {
-            throw new Error('文件不存在');
           }
-      } catch (error) {
-        // 如果在浏览器中运行，尝试使用 XMLHttpRequest
-        if (error.message.includes('require is not defined')) {
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', `${basePath}/${filePath}`, true);
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-              if (xhr.status === 200) {
-                // 解析 Markdown 为 HTML
-                const html = marked.parse(xhr.responseText);
-                // 处理图片路径
-                const processedHtml = html.replace(/<img src="([^"]+)"/g, function(match, src) {
-                  // 如果是绝对路径，直接返回
-                  if (src.startsWith('http://') || src.startsWith('https://')) {
-                    return match;
-                  }
-                  // 如果是相对路径，转换为相对于 basePath 的路径
-                  const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
-                  const imgPath = `${dirPath}/${src}`;
-                  return `<img src="${basePath}/${imgPath}"`;
-                });
-                content.innerHTML = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}">${processedHtml}</div>`;
-            // 为文件中的链接添加点击事件监听器
-            setTimeout(() => {
-              const links = content.querySelectorAll('.markdown-body a');
-              links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  const text = this.textContent.trim();
-                  // 根据链接文本查找对应的菜谱文件
-                  findAndLoadRecipe(text);
-                });
+        });
+      } else {
+        // 如果 preload API 不可用，尝试使用 XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `${basePath}/${filePath}`, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              // 解析 Markdown 为 HTML
+              const html = marked.parse(xhr.responseText);
+              // 处理图片路径
+              const processedHtml = html.replace(/<img src="([^"]+)"/g, function(match, src) {
+                // 如果是绝对路径，直接返回
+                if (src.startsWith('http://') || src.startsWith('https://')) {
+                  return match;
+                }
+                // 如果是相对路径，转换为相对于 basePath 的路径
+                const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
+                const imgPath = `${dirPath}/${src}`;
+                return `<img src="${basePath}/${imgPath}"`;
               });
-            }, 0);
-              } else {
-                content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：HTTP ${xhr.status}</p></div>`;
-                console.error('加载文件失败:', xhr.status);
-              }
+              content.innerHTML = `<div class="card markdown-body ${document.body.classList.contains('dark') ? 'dark' : ''}">${processedHtml}</div>`;
+          // 为文件中的链接添加点击事件监听器
+          setTimeout(() => {
+            const links = content.querySelectorAll('.markdown-body a');
+            links.forEach(link => {
+              link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const text = this.textContent.trim();
+                // 根据链接文本查找对应的菜谱文件
+                findAndLoadRecipe(text);
+              });
+            });
+          }, 0);
+            } else {
+              content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：HTTP ${xhr.status}</p></div>`;
+              console.error('加载文件失败:', xhr.status);
             }
-          };
-          xhr.send();
-        } else {
-          content.innerHTML = `<div class="card"><h2>加载失败</h2><p>无法加载文件：${filePath}</p><p>错误信息：${error.message}</p></div>`;
-          console.error('加载文件失败:', error);
-        }
+          }
+        };
+        xhr.send();
       }
     }
 
